@@ -114,8 +114,12 @@
             title:'租户编号',
             align:"center",
             dataIndex: 'id'
+          },{
+            title:'角色编码前缀',
+            align:"center",
+            dataIndex: 'preCode'
           },
-          /*{
+          {
             title:'开始时间',
             align:"center",
             dataIndex: 'beginDate'
@@ -124,7 +128,7 @@
             title:'结束时间',
             align:"center",
             dataIndex: 'endDate'
-          },*/
+          },
           {
             title:'状态',
             align:"center",

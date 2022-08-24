@@ -14,8 +14,14 @@
               <a-input-number style="width: 100%" :min="1" v-model="model.id" placeholder="请输入租户编号" :disabled="disabledId"></a-input-number>
             </a-form-model-item>
           </a-col>
+
+           <a-col :span="24">
+            <a-form-model-item label="角色编码前缀" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="preCode">
+              <a-input style="width: 100%" v-model="model.preCode" placeholder="请输入角色编码前缀" :disabled="disabledId"></a-input>
+            </a-form-model-item>
+          </a-col>
           
-<!--          <a-col :span="24">
+         <a-col :span="24">
             <a-form-model-item label="开始时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <j-date placeholder="请选择开始时间" v-model="model.beginDate" :show-time="true" date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%"/>
             </a-form-model-item>
@@ -24,7 +30,7 @@
             <a-form-model-item label="结束时间" :labelCol="labelCol" :wrapperCol="wrapperCol">
               <j-date placeholder="请选择结束时间" v-model="model.endDate" :show-time="true" date-format="YYYY-MM-DD HH:mm:ss" style="width: 100%"/>
             </a-form-model-item>
-          </a-col>-->
+          </a-col>
           
           <a-col :span="24">
             <a-form-model-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol">
