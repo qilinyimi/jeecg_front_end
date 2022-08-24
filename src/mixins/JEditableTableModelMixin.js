@@ -92,6 +92,7 @@ export const JEditableTableModelMixin = {
     },
     /** 查询某个tab的数据 */
     requestSubTableData(url, params, tab, success) {
+      console.log(url, params, tab, success)
       tab.loading = true
       getAction(url, params).then(res => {
         let { result } = res
@@ -103,7 +104,16 @@ export const JEditableTableModelMixin = {
             dataSource = result.records
           }
         }
-        tab.dataSource = dataSource
+        if(url === '/report/investPlanReport/queryFileListByMainId'){
+          tab.dataSource = dataSource.map(item=>{
+            return {
+              ...item,
+              fileName:item.fileUp
+            }
+          })
+        }else{
+          tab.dataSource = dataSource
+        }
         typeof success === 'function' ? success(res) : ''
       }).finally(() => {
         tab.loading = false

@@ -637,6 +637,33 @@
                     </template>
                     <!-- select搜索 -end -->
 
+                    <!-- select搜索 -begin 投资计划专用 -->
+                    <template v-else-if="col.type === formTypes.sel_search1">
+                      <a-tooltip v-bind="buildTooltipProps(row, col, id)">
+                         <j-category-select 
+                            v-if="isEditRow(row, col)"
+                            :pcode="col.dictCode"
+                            :id="id"
+                            :key="i"
+                            :value="searchSelectValues1[id]"
+                            :placeholder="replaceProps(col, col.placeholder)"
+                            :dict="col.dict"
+                            :async="true"
+                            :getPopupContainer="getParentContainer"
+                            v-bind="buildProps(row,col)"
+                            style="width: 100%;"
+                            @change="(v)=>handleSearchSelectChange1(v,id,row,col)"
+                            />
+                        <span
+                          v-else
+                          class="j-td-span no-edit"
+                          :class="{disabled: buildProps(row,col).disabled}"
+                          @click="handleEditRow(row, col)"
+                        >{{ getSelectTranslateText(searchSelectValues1[id], row, col) }}</span>
+                      </a-tooltip>
+                    </template>
+                    <!-- select搜索 -end  投资计划专用 -->
+
                     <!-- select异步搜索 -begin -->
                     <template v-else-if="col.type === formTypes.sel_search_async">
                       <a-tooltip v-bind="buildTooltipProps(row, col, id)">
@@ -740,6 +767,7 @@
 
 <script>
   import Vue from 'vue'
+    import JCategorySelect from '@/components/jeecg/JCategorySelect'
   import Draggable from 'vuedraggable'
   import { ACCESS_TOKEN } from '@/store/mutation-types'
   import { FormTypes, VALIDATE_NO_PASSED } from '@/utils/JEditableTableUtil'
@@ -756,7 +784,7 @@
 
   export default {
     name: 'JEditableTable',
-    components: { JDate, Draggable, JInputPop, JFilePop },
+    components: { JDate, Draggable, JInputPop, JFilePop ,JCategorySelect},
     provide() {
       return {
         parentIsJEditableTable: true,
@@ -891,6 +919,7 @@
         multiSelectValues: {},
         searchSelectValues: {},
         searchSelectAsyncValues: {},
+        searchSelectValues1:{},
         // 绑定左侧选择框已选择的id
         selectedRowIds: [],
         // 存储被删除行的id
@@ -1157,6 +1186,7 @@
         this.multiSelectValues = {}
         this.searchSelectValues = {}
         this.searchSelectAsyncValues = {}
+        this.searchSelectValues1 = {}
         //update-end-author:shunjlei date:20210415 for:类型赋值错误
 
         // 重置滚动条
@@ -1234,6 +1264,7 @@
         let multiSelectValues = { ...this.multiSelectValues }
         let searchSelectValues = { ...this.searchSelectValues }
         let searchSelectAsyncValues = { ...this.searchSelectAsyncValues }
+        let searchSelectValues1 = { ...this.searchSelectValues1 }
         // 禁用行的id
         let disabledRowIds = (this.disabledRowIds || [])
         dataSource.forEach((data, newValueIndex) => {
@@ -1325,6 +1356,8 @@
               searchSelectValues[inputId] = sourceValue
             } else if (column.type === FormTypes.sel_search_async) {
               searchSelectAsyncValues[inputId] = sourceValue
+            } else if (column.type === FormTypes.sel_search1) {
+              searchSelectValues1[inputId] = sourceValue
             } else if (column.type === FormTypes.list_multi) {
               if (typeof sourceValue === 'string' && sourceValue.length > 0) {
                 multiSelectValues[inputId] = sourceValue.split(',')
@@ -1412,6 +1445,7 @@
         this.multiSelectValues = multiSelectValues
         this.searchSelectValues = searchSelectValues
         this.searchSelectAsyncValues = searchSelectAsyncValues
+        this.searchSelectValues1 = searchSelectValues1
         // 重新计算所有统计列
         this.recalcAllStatisticsColumns()
         // 更新到 dom
@@ -1648,6 +1682,8 @@
               value[column.key] = this.radioValues[inputId]
             } else if (column.type === FormTypes.sel_search) {
               value[column.key] = this.searchSelectValues[inputId]
+            } else if (column.type === FormTypes.sel_search1) {
+              value[column.key] = this.searchSelectValues1[inputId]
             } else if (column.type === FormTypes.sel_search_async) {
               value[column.key] = this.searchSelectAsyncValues[inputId]
             } else if (column.type === FormTypes.list_multi) {
@@ -1779,6 +1815,7 @@
           multiSelectValues: this.multiSelectValues,
           searchSelectValues: this.searchSelectValues,
           searchSelectAsyncValues: this.searchSelectAsyncValues,
+          searchSelectValues1: this.searchSelectValues1,
         })
       },
       /** 设置某行某列的值 */
@@ -1844,6 +1881,9 @@
                       edited = this.setOneValue(this.multiSelectValues, modelKey, newValue, true)
                     } else if (column.type === FormTypes.sel_search) {
                       edited = this.setOneValue(this.searchSelectValues, modelKey, newValue)
+                    } else if (column.type === FormTypes.sel_search_async) {
+                    } else if (column.type === FormTypes.sel_search1) {
+                      edited = this.setOneValue(this.searchSelectValues1, modelKey, newValue)
                     } else if (column.type === FormTypes.sel_search_async) {
                       edited = this.setOneValue(this.searchSelectAsyncValues, modelKey, newValue)
                     } else {
@@ -2537,6 +2577,7 @@
         if (obj) {
           Object.assign(this.settings, obj)
         }
+        console.log(this.searchSelectValues)
       },
 
       /** 记录用到数据绑定的组件的值 */
@@ -2941,6 +2982,12 @@
       },
       handleSearchSelectChange(value, id, row, column) {
         this.searchSelectValues = this.bindValuesChange(value, id, 'searchSelectValues')
+        this.validateOneInput(value, row, column, this.notPassedIds, true, 'change')
+        this.elemValueChange(FormTypes.sel_search, row, column, value)
+      },
+      handleSearchSelectChange1(value, id, row, column) {
+        console.log(value, id, row, column)
+        this.searchSelectValues1 = this.bindValuesChange(value, id, 'searchSelectValues1')
         this.validateOneInput(value, row, column, this.notPassedIds, true, 'change')
         this.elemValueChange(FormTypes.sel_search, row, column, value)
       },

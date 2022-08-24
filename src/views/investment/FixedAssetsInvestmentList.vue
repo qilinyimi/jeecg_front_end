@@ -70,6 +70,7 @@
           class="j-table-force-nowrap"
           :scroll="{ x: true }"
           :columns="columns"
+          :customRow="handleDbclick"
           :dataSource="dataSource"
           :pagination="ipagination"
           :loading="loading"
@@ -359,6 +360,16 @@ export default {
     },
   },
   methods: {
+    handleDbclick(record){
+      return {
+        on:{
+          dblclick:(event)=>{
+            console.log(record)
+            this.$message.success('双击表格事件触发')
+          },
+        }
+      }
+    },
     //点击树节点的回调
     async handleSelect(selectedKeys,e){
       console.log(selectedKeys,e)
