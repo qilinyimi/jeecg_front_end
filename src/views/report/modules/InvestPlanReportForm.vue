@@ -166,19 +166,19 @@
       </a-table>
     </a-modal>
     <a-modal v-model="GdVisible" title="选择归档地址" @ok="handleOk2">
-      <a-tree-select
+      <!-- <a-tree-select
         v-model="treeValue"
         style="width: 100%"
         :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
         :tree-data="treeData"
         :load-data="onLoadData"
          placeholder="Please select"
-      />
+      /> -->
 
-      <!-- <j-category-select 
+      <j-category-select 
         pcode="B03"
         v-model="categroyUp"
-        /> -->
+        />
     </a-modal>
   </a-spin>
 </template>
