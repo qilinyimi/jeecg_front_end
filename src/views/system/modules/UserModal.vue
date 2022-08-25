@@ -67,14 +67,14 @@
         </a-form-model-item>
 
         <!--租户分配-->
-        <a-form-model-item label="租户分配" :labelCol="labelCol" :wrapperCol="wrapperCol" v-show="!departDisabled">
+        <!-- <a-form-model-item label="租户分配" :labelCol="labelCol" :wrapperCol="wrapperCol" v-show="!departDisabled">
           <j-multi-select-tag
                   :disabled="disableSubmit"
                   v-model="model.relTenantIds"
                   :options="tenantsOptions"
                   placeholder="请选择租户">
           </j-multi-select-tag>
-        </a-form-model-item>
+        </a-form-model-item> -->
 
         <a-form-model-item label="身份" :labelCol="labelCol" :wrapperCol="wrapperCol">
           <a-radio-group  v-model="model.userIdentity"  @change="identityChange">
